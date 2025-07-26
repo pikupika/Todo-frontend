@@ -1,19 +1,35 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-const BASE_URL = "https://your-backend-name.onrender.com"; // ✅ replace this with your Render backend URL
-
-const TodoList = () => {
+export default function Todos() {
   const [todos, setTodos] = useState([]);
+  const [error, setError] = useState("");
+
+  const BASE_URL = "https://todo-backend-0ar5.onrender.com";
 
   useEffect(() => {
-    // ✅ Fetch todos from backend
     const fetchTodos = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No token found. Please login.");
+        return;
+      }
+
       try {
-        const res = await fetch(`${BASE_URL}/api/todos`);
+        const res = await fetch(`${BASE_URL}/api/todos`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          const msg = await res.text();
+          throw new Error(`Error ${res.status}: ${msg}`);
+        }
+
         const data = await res.json();
-        setTodos(data);
+        setTodos(data.todos || []);
       } catch (err) {
-        console.error("Error fetching todos:", err);
+        setError(err.message);
       }
     };
 
@@ -21,15 +37,22 @@ const TodoList = () => {
   }, []);
 
   return (
-    <div className="todo-list">
-      <h2 className="text-xl font-semibold mb-4">Your Todos</h2>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo._id}>{todo.text}</li>
-        ))}
-      </ul>
+    <div className="p-6 bg-white shadow rounded">
+      <h1 className="text-2xl font-bold mb-4">Todos</h1>
+
+      {error && <p className="text-red-500">{error}</p>}
+
+      {todos.length > 0 ? (
+        <ul>
+          {todos.map((todo) => (
+            <li key={todo._id} className="mb-2 border-b pb-2">
+              {todo.text}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        !error && <p>No todos found</p>
+      )}
     </div>
   );
-};
-
-export default TodoList;
+}
