@@ -1,16 +1,40 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
-//import Register from './pages/Register';
-//import Home from './pages/Home';
+import { useEffect, useState } from "react";
 
-export default function App() {
-  const token = localStorage.getItem('token');
+const BASE_URL = "https://your-render-name.onrender.com"; // ✅ Your Render backend URL
+
+function App() {
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/todos`);
+        const data = await res.json();
+        setTodos(data);
+      } catch (err) {
+        console.error("Error fetching todos:", err);
+      }
+    };
+
+    fetchTodos();
+  }, []);
 
   return (
-    <Routes>
-      <Route path='/' element={token ? <Home /> : <Navigate to='/login'/>} />
-      <Route path='/login' element={<Login/>} />
-      <Route path='/register' element={<Register />} />
-    </Routes>
-  )
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+      <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
+        <h1 className="text-2xl font-bold mb-4">Your Todos</h1>
+        {todos.length === 0 ? (
+          <p>No todos found.</p>
+        ) : (
+          <ul className="list-disc pl-5 space-y-2">
+            {todos.map((todo) => (
+              <li key={todo._id}>{todo.text}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
 }
+
+export default App;
