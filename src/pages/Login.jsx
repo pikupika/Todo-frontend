@@ -1,63 +1,31 @@
-import React, { useState } from "react";
-import api from "../axios";
+// src/pages/Login.jsx
+import { useState } from 'react';
+import { loginUser } from '../api/auth';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await api.post("/api/users/login", {
-                email, password,
-            });
-            localStorage.setItem("token", response.data.token);
-            alert("Login successful!");
-        } catch (error) {
-            console.log("Login error: ", error.response?.data || error.message);
-            alert("Login failed: ", (error.response?.data?.message || error.message));
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await loginUser({ email, password });
+      localStorage.setItem('token', res.data.token);
+      navigate('/todos');
+    } catch (err) {
+      alert('Login failed');
     }
+  };
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <form
-                onSubmit={handleLogin}
-                className="bg-white p-6 rounded shadow-md w-full max-w-sm"
-            >
-                <h2 className="text-2xl font-bold mb-4">Login</h2>
-
-                <label className="block mb-2">
-                    Email:
-                    <input
-                        type="email"
-                        className="w-full border px-3 py-2 rounded mt-1"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </label>
-
-                <label className="block mb-4">
-                    Password:
-                    <input
-                        type="password"
-                        className="w-full border px-3 py-2 rounded mt-1"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </label>
-
-                <button
-                    type="submit"
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded w-full"
-                >
-                    Login
-                </button>
-            </form>
-        </div>
-    );
-}
+  return (
+    <form onSubmit={handleSubmit}>
+      <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+      <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+      <button type="submit">Login</button>
+    </form>
+  );
+};
 
 export default Login;
