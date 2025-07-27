@@ -1,14 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
+import { BASE_URL } from "../config";
 
-const API = axios.create({
-  baseURL: 'https://todo-backend-0ar5.onrender.com',
+const instance = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true,
 });
 
-API.interceptors.request.use((req) => {
-  const token = localStorage.getItem('token');
-  if (token) req.headers.Authorization = `Bearer ${token}`;
-  return req;
-});
-
-export default API;
-
+export default instance;

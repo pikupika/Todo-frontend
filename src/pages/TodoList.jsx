@@ -1,52 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import API from '../api/axios';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { fetchTodos, createTodo, updateTodo, deleteTodo } from "../api/auth";
+import TodoItem from "../components/TodoItem";
+import Navbar from "../components/Navbar";
 
-const TodoList = () => {
+export default function TodoList() {
   const [todos, setTodos] = useState([]);
-  const navigate = useNavigate();
-
-  const fetchTodos = async () => {
-    try {
-      const { data } = await API.get('/todos');
-      setTodos(data);
-    } catch (err) {
-      alert('Failed to load todos');
-    }
-  };
-
-  const markDone = async (id) => {
-    await API.patch(`/todos/${id}`, { isCompleted: true });
-    fetchTodos();
-  };
-
-  const deleteTodo = async (id) => {
-    await API.delete(`/todos/${id}`);
-    fetchTodos();
-  };
-
-  const logout = () => {
-    localStorage.removeItem('token');
-    navigate('/');
-  };
+  const [text, setText] = useState("");
 
   useEffect(() => {
-    fetchTodos();
+    getTodos();
   }, []);
 
-  return (
-    <div>
-      <button onClick={logout}>Logout</button>
-      <h2>Your Todos</h2>
-      {todos.map(todo => (
-        <div key={todo._id}>
-          <span style={{ textDecoration: todo.isCompleted ? 'line-through' : 'none' }}>{todo.title}</span>
-          {!todo.isCompleted && <button onClick={() => markDone(todo._id)}>Mark Done</button>}
-          <button onClick={() => deleteTodo(todo._id)}>Delete</button>
-        </div>
-      ))}
-    </div>
-  );
-};
+  const getTodos = async () => {
+    const data = await fetchTodos();
+    setTodos(data);
+  };
 
-export default TodoList;
+  const handleAdd = async (e) => {
+    e.preventDefault();
+    await createTodo({ text });
+    setText("");
+    getTodos();
+  };
+
+  const handleUpdate = async (id) => {
+    await updateTodo(id, { completed: true });
+    getTodos();
+  };
+
+  const handleDelete = async (id) => {
+    await deleteTodo(id);
+    getTodos();
+  };
+
+  return (
+    <>
+      <Navbar />
+      <div className="p-4">
+        <form onSubmit={handleAdd} className="mb-4">
+          <input value={text} onChange={(e) => setText(e.target.value)} className="border p-2 mr-2" />
+          <button className="bg-blue-600 text-white px-4 py-2">Add</button>
+        </form>
+        {todos.map((todo) => (
+          <TodoItem key={todo._id} todo={todo} onUpdate={handleUpdate} onDelete={handleDelete} />
+        ))}
+      </div>
+    </>
+  );
+}

@@ -1,29 +1,28 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../api/auth';
+import { useState } from "react";
+import { registerUser } from "../api/auth";
+import { useNavigate } from "react-router-dom";
 
-const Register = () => {
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+export default function Register() {
+  const [formData, setFormData] = useState({ username: "", email: "", password: "" });
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await registerUser(form);
-      navigate('/');
-    } catch (err) {
-      alert('Registration failed');
+      await registerUser(formData);
+      navigate("/login");
+    } catch {
+      alert("Register failed");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input placeholder="Name" onChange={e => setForm({...form, name: e.target.value})} />
-      <input placeholder="Email" onChange={e => setForm({...form, email: e.target.value})} />
-      <input placeholder="Password" type="password" onChange={e => setForm({...form, password: e.target.value})} />
-      <button type="submit">Register</button>
+    <form onSubmit={handleRegister} className="p-4">
+      <h2 className="text-xl mb-2">Register</h2>
+      <input type="text" placeholder="Username" value={formData.username} onChange={(e) => setFormData({...formData, username: e.target.value})} className="border p-2 mb-2 w-full" />
+      <input type="email" placeholder="Email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="border p-2 mb-2 w-full" />
+      <input type="password" placeholder="Password" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} className="border p-2 mb-2 w-full" />
+      <button type="submit" className="bg-green-500 text-white px-4 py-2">Register</button>
     </form>
   );
-};
-
-export default Register;
+}
