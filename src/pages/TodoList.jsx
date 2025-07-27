@@ -1,33 +1,33 @@
-import { useEffect, useState } from 'react';
-import axios from '../api/axios';
+import React, { useEffect, useState } from 'react';
+import API from '../api/axios';
+import { useNavigate } from 'react-router-dom';
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState('');
+  const navigate = useNavigate();
 
   const fetchTodos = async () => {
-    const token = localStorage.getItem('token');
-    const res = await axios.get('/todo', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    setTodos(res.data);
+    try {
+      const { data } = await API.get('/todos');
+      setTodos(data);
+    } catch (err) {
+      alert('Failed to load todos');
+    }
   };
 
-  const addTodo = async () => {
-    const token = localStorage.getItem('token');
-    await axios.post('/todo', { task: newTodo }, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    setNewTodo('');
+  const markDone = async (id) => {
+    await API.patch(`/todos/${id}`, { isCompleted: true });
     fetchTodos();
   };
 
   const deleteTodo = async (id) => {
-    const token = localStorage.getItem('token');
-    await axios.delete(`/todo/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    await API.delete(`/todos/${id}`);
     fetchTodos();
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
   };
 
   useEffect(() => {
@@ -36,17 +36,15 @@ const TodoList = () => {
 
   return (
     <div>
-      <h1>Your Todos</h1>
-      <input value={newTodo} onChange={e => setNewTodo(e.target.value)} />
-      <button onClick={addTodo}>Add</button>
-      <ul>
-        {todos.map(todo => (
-          <li key={todo._id}>
-            {todo.task}
-            <button onClick={() => deleteTodo(todo._id)}>X</button>
-          </li>
-        ))}
-      </ul>
+      <button onClick={logout}>Logout</button>
+      <h2>Your Todos</h2>
+      {todos.map(todo => (
+        <div key={todo._id}>
+          <span style={{ textDecoration: todo.isCompleted ? 'line-through' : 'none' }}>{todo.title}</span>
+          {!todo.isCompleted && <button onClick={() => markDone(todo._id)}>Mark Done</button>}
+          <button onClick={() => deleteTodo(todo._id)}>Delete</button>
+        </div>
+      ))}
     </div>
   );
 };

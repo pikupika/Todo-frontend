@@ -1,18 +1,16 @@
-// src/pages/Login.jsx
-import { useState } from 'react';
-import { loginUser } from '../api/auth';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../api/auth';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [form, setForm] = useState({ email: '', password: '' });
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await loginUser({ email, password });
-      localStorage.setItem('token', res.data.token);
+      const { data } = await loginUser(form);
+      localStorage.setItem('token', data.token);
       navigate('/todos');
     } catch (err) {
       alert('Login failed');
@@ -21,8 +19,8 @@ const Login = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+      <input placeholder="Email" onChange={e => setForm({...form, email: e.target.value})} />
+      <input placeholder="Password" type="password" onChange={e => setForm({...form, password: e.target.value})} />
       <button type="submit">Login</button>
     </form>
   );

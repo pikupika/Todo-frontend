@@ -1,11 +1,14 @@
-
 import axios from 'axios';
 
-const BASE_URL = 'https://todo-backend-0ar5.onrender.com'; 
-
-const axiosInstance = axios.create({
-  baseURL: BASE_URL,
-  withCredentials: true,
+const API = axios.create({
+  baseURL: 'https://todo-backend-0ar5.onrender.com',
 });
 
-export default axiosInstance;
+API.interceptors.request.use((req) => {
+  const token = localStorage.getItem('token');
+  if (token) req.headers.Authorization = `Bearer ${token}`;
+  return req;
+});
+
+export default API;
+
