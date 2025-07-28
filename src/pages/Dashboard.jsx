@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-const [editId, setEditId] = useState(null);
-const [editText, setEditText] = useState('');
 
 
 const Dashboard = () => {
@@ -10,6 +8,8 @@ const Dashboard = () => {
   const [text, setText] = useState('');
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
+  const [editId, setEditId] = useState(null);
+const [editText, setEditText] = useState('');
 
   const fetchTodos = async () => {
     try {
