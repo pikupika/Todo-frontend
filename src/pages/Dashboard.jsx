@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const [editId, setEditId] = useState(null);
+const [editText, setEditText] = useState('');
+
 
 const Dashboard = () => {
   const [todos, setTodos] = useState([]);
@@ -53,6 +56,22 @@ const Dashboard = () => {
     }
   };
 
+  const updateTodo = async (id, updatedText) => {
+    try {
+      await axios.put(`https://todo-backend-0ar5.onrender.com/api/todos/${id}`, {
+        text: updatedText
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setEditId(null);
+      setEditText('');
+      fetchTodos();
+    } catch (err) {
+      console.error('Failed to update todo:', err);
+    }
+  };
+
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.href = '/';
@@ -93,28 +112,71 @@ const Dashboard = () => {
         <ul className="space-y-3">
           {todos.map(todo => (
             <li key={todo._id} className="flex justify-between items-center bg-gray-50 border p-3 rounded">
-              <span className={`text-gray-800 ${todo.read ? 'line-through text-gray-400' : ''}`}>
-                {todo.text}
-              </span>
-              <div className="flex gap-3">
-                {!todo.read && (
-                  <button
-                    onClick={() => markAsRead(todo._id)}
-                    className="text-green-600 hover:underline"
-                  >
-                    Mark Read
-                  </button>
+              <div className="flex-grow">
+                {editId === todo._id ? (
+                  <input
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    className="border px-2 py-1 rounded w-full"
+                  />
+                ) : (
+                  <span className={`text-gray-800 ${todo.read ? 'line-through text-gray-400' : ''}`}>
+                    {todo.text}
+                  </span>
                 )}
-                <button
-                  onClick={() => deleteTodo(todo._id)}
-                  className="text-red-600 hover:underline"
-                >
-                  Delete
-                </button>
+              </div>
+
+              <div className="flex gap-3 ml-4">
+                {editId === todo._id ? (
+                  <>
+                    <button
+                      onClick={() => updateTodo(todo._id, editText)}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => {
+                        setEditId(null);
+                        setEditText('');
+                      }}
+                      className="text-gray-600 hover:underline"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {!todo.read && (
+                      <button
+                        onClick={() => markAsRead(todo._id)}
+                        className="text-green-600 hover:underline"
+                      >
+                        Mark Read
+                      </button>
+                    )}
+                    <button
+                      onClick={() => {
+                        setEditId(todo._id);
+                        setEditText(todo.text);
+                      }}
+                      className="text-yellow-600 hover:underline"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => deleteTodo(todo._id)}
+                      className="text-red-600 hover:underline"
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
               </div>
             </li>
           ))}
         </ul>
+
       </div>
     </div>
   );
