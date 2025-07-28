@@ -6,6 +6,7 @@ const Dashboard = () => {
   const [todos, setTodos] = useState([]);
   const [text, setText] = useState('');
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();
 
   const fetchTodos = async () => {
     try {
@@ -52,52 +53,75 @@ const Dashboard = () => {
     }
   };
 
-  const navigate = useNavigate();
-
-useEffect(() => {
-  if (!token) {
-    navigate('/');
-  }
-}, []);
-
   const handleLogout = () => {
-  localStorage.removeItem('token');
-  window.location.href = '/';
-};
+    localStorage.removeItem('token');
+    window.location.href = '/';
+  };
 
+  useEffect(() => {
+    if (!token) navigate('/');
+    fetchTodos();
+  }, []);
 
   return (
-    <div className="p-4 max-w-2xl mx-auto">
-      <button className="text-red-500 mb-4" onClick={handleLogout}>
-  Logout
-</button>
+    <div className="min-h-screen bg-gradient-to-r from-gray-50 to-gray-100 p-6">
+      <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-800">Your Todos 📝</h1>
+          <button
+            onClick={handleLogout}
+            className="text-red-600 hover:text-red-800 font-medium transition duration-200"
+          >
+            Logout
+          </button>
+        </div>
 
-      <h1 className="text-2xl font-bold mb-4">Your Todos 📝</h1>
-      <div className="flex gap-2 mb-4">
-        <input
-          className="border p-2 flex-grow rounded"
-          value={text}
-          placeholder="Enter a task..."
-          onChange={(e) => setText(e.target.value)}
-        />
-        <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={addTodo}>Add</button>
+        <div className="flex gap-3 mb-6">
+          <input
+            className="flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 outline-none"
+            value={text}
+            placeholder="Enter a task..."
+            onChange={(e) => setText(e.target.value)}
+          />
+          <button
+            onClick={addTodo}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium transition duration-200"
+          >
+            Add
+          </button>
+        </div>
+
+        <ul className="space-y-3">
+          {todos.map((todo) => (
+            <li
+              key={todo._id}
+              className="flex justify-between items-center bg-gray-50 border rounded-lg px-4 py-3 shadow-sm animate-fade-in"
+            >
+              <span className={`text-lg ${todo.read ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+                {todo.text}
+              </span>
+              <div className="flex gap-3">
+                {!todo.read && (
+                  <button
+                    onClick={() => markAsRead(todo._id)}
+                    className="text-green-600 hover:text-green-800 transition duration-200"
+                  >
+                    Mark Read
+                  </button>
+                )}
+                <button
+                  onClick={() => deleteTodo(todo._id)}
+                  className="text-red-500 hover:text-red-700 transition duration-200"
+                >
+                  Delete
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
-      <ul>
-        {todos.map(todo => (
-          <li key={todo._id} className="flex justify-between items-center mb-2 p-2 border rounded bg-white shadow-sm">
-            <span className={todo.read ? 'line-through text-gray-500' : ''}>{todo.text}</span>
-            <div className="flex gap-2">
-              {!todo.read && (
-                <button className="text-blue-500 hover:underline" onClick={() => markAsRead(todo._id)}>Mark Read</button>
-              )}
-              <button className="text-red-500 hover:underline" onClick={() => deleteTodo(todo._id)}>Delete</button>
-            </div>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 };
 
 export default Dashboard;
-
