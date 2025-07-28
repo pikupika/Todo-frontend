@@ -59,59 +59,55 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (!token) navigate('/');
-    fetchTodos();
+    if (!token) {
+      navigate('/');
+    } else {
+      fetchTodos();
+    }
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-gray-50 to-gray-100 p-6">
-      <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">Your Todos 📝</h1>
-          <button
-            onClick={handleLogout}
-            className="text-red-600 hover:text-red-800 font-medium transition duration-200"
-          >
-            Logout
-          </button>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-3xl font-semibold text-gray-800">📝 Your Todos</h1>
+          <button onClick={handleLogout} className="text-red-600 font-medium hover:underline">Logout</button>
         </div>
 
-        <div className="flex gap-3 mb-6">
+        <div className="flex mb-6 gap-2">
           <input
-            className="flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 outline-none"
+            type="text"
             value={text}
-            placeholder="Enter a task..."
+            placeholder="Enter a new task..."
             onChange={(e) => setText(e.target.value)}
+            className="flex-grow border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             onClick={addTodo}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium transition duration-200"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
           >
             Add
           </button>
         </div>
 
         <ul className="space-y-3">
-          {todos.map((todo) => (
-            <li
-              key={todo._id}
-              className="flex justify-between items-center bg-gray-50 border rounded-lg px-4 py-3 shadow-sm animate-fade-in"
-            >
-              <span className={`text-lg ${todo.read ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+          {todos.map(todo => (
+            <li key={todo._id} className="flex justify-between items-center bg-gray-50 border p-3 rounded">
+              <span className={`text-gray-800 ${todo.read ? 'line-through text-gray-400' : ''}`}>
                 {todo.text}
               </span>
               <div className="flex gap-3">
                 {!todo.read && (
                   <button
                     onClick={() => markAsRead(todo._id)}
-                    className="text-green-600 hover:text-green-800 transition duration-200"
+                    className="text-green-600 hover:underline"
                   >
                     Mark Read
                   </button>
                 )}
                 <button
                   onClick={() => deleteTodo(todo._id)}
-                  className="text-red-500 hover:text-red-700 transition duration-200"
+                  className="text-red-600 hover:underline"
                 >
                   Delete
                 </button>
