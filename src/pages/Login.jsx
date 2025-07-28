@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
@@ -13,7 +15,7 @@ const Login = () => {
         password
       });
       localStorage.setItem('token', res.data.token);
-      window.location.href = '/dashboard';
+      navigate('/dashboard');
     } catch (err) {
       alert('Login failed');
     }
