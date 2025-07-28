@@ -12,7 +12,7 @@ This is the frontend of a full-stack Todo App built with **React**, **Vite**, an
 - ✅ Add, complete, mark as read, and delete todos
 - 🎨 Tailwind CSS for clean UI
 - 🔗 Axios for API requests
-- 🔄 SPA routing with `HashRouter` (supports Vercel/GitHub Pages)
+- 🔄 SPA routing (supports Vercel/GitHub Pages)
 - ⚠️ Form validation and toast/error messages
 
 ---
@@ -48,7 +48,6 @@ Make sure your backend is running locally (see [Todo Backend](https://github.com
 
 ## 🌐 Deployment (Vercel or GitHub Pages)
 
-- Uses `HashRouter` to avoid 404 errors on reload.
 - Make sure to update backend API URLs to production Render URL if deployed.
 
 ---
