@@ -1,29 +1,31 @@
-import { useState } from "react";
-import { loginUser } from "../api/auth";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import axios from 'axios';
 
-export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async () => {
     try {
-      const data = await loginUser({ email, password });
-      localStorage.setItem("token", data.token);
-      navigate("/todos");
+      const res = await axios.post('https://todo-backend-0ar5.onrender.com/api/auth/login', {
+        username,
+        password
+      });
+      localStorage.setItem('token', res.data.token);
+      window.location.href = '/dashboard';
     } catch (err) {
-      alert("Login failed");
+      alert('Login failed');
     }
   };
 
   return (
-    <form onSubmit={handleLogin} className="p-4">
-      <h2 className="text-xl mb-2">Login</h2>
-      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="border p-2 mb-2 w-full" />
-      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="border p-2 mb-2 w-full" />
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2">Login</button>
-    </form>
+    <div className="h-screen flex flex-col items-center justify-center bg-gray-100">
+      <h1 className="text-2xl mb-6 font-bold">Login</h1>
+      <input className="mb-2 p-2 border rounded" placeholder="Username" onChange={e => setUsername(e.target.value)} />
+      <input className="mb-4 p-2 border rounded" type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
+      <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleLogin}>Login</button>
+    </div>
   );
-}
+};
+
+export default Login;

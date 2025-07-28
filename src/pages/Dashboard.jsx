@@ -8,7 +8,7 @@ export default function TodoList() {
   const [text, setText] = useState("");
 
   useEffect(() => {
-    getTodos();
+    getTodos(); 
   }, []);
 
   const getTodos = async () => {
