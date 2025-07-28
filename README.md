@@ -1,12 +1,66 @@
-# React + Vite
+# 📝 Todo App Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend of a full-stack Todo App built with **React**, **Vite**, and **Tailwind CSS**. It allows users to register, log in, and manage their todos in a responsive and intuitive interface.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- 🔐 User Registration & Login
+- 🎟️ JWT token saved in localStorage
+- 🔒 Protected routes (TodoList page is accessible only after login)
+- ✅ Add, complete, mark as read, and delete todos
+- 🎨 Tailwind CSS for clean UI
+- 🔗 Axios for API requests
+- 🔄 SPA routing with `HashRouter` (supports Vercel/GitHub Pages)
+- ⚠️ Form validation and toast/error messages
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ Tech Stack
+
+- React
+- Vite
+- Tailwind CSS
+- React Router
+- Axios
+
+---
+
+## Live 
+
+[Live](https://todo-frontend-one-drab.vercel.app/)
+
+---
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/yourusername/todo-frontend.git
+cd todo-frontend
+npm install
+npm run dev
+```
+
+Make sure your backend is running locally (see [Todo Backend](https://github.com/pikupika/todo-backend) and your `src/api/axios.js` has the correct API base URL.
+
+---
+
+## 🌐 Deployment (Vercel or GitHub Pages)
+
+- Uses `HashRouter` to avoid 404 errors on reload.
+- Make sure to update backend API URLs to production Render URL if deployed.
+
+---
+
+## 🔗 Backend Repo
+
+[Go to Todo App Backend →](https://github.com/pikupika/todo-backend)
+
+---
+
+## 👤 Author
+
+**Priyanshi Singh**  
+Aspiring Full-Stack Developer  
+[GitHub](https://github.com/pikupika) | [LinkedIn](https://www.linkedin.com/in/priyanshi-singh-27980a271/)
