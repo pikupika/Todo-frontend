@@ -67,34 +67,70 @@ useEffect(() => {
 
 
   return (
-    <div className="p-4 max-w-2xl mx-auto">
-      <button className="text-red-500 mb-4" onClick={handleLogout}>
-  Logout
-</button>
+    <div className="min-h-screen bg-gradient-to-tr from-indigo-100 via-white to-pink-100 px-4 py-8">
+      <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-8 transition-all duration-500">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-indigo-600">📝 Your Todos</h1>
+          <button
+            className="text-red-500 hover:text-red-700 font-medium"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        </div>
 
-      <h1 className="text-2xl font-bold mb-4">Your Todos 📝</h1>
-      <div className="flex gap-2 mb-4">
-        <input
-          className="border p-2 flex-grow rounded"
-          value={text}
-          placeholder="Enter a task..."
-          onChange={(e) => setText(e.target.value)}
-        />
-        <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={addTodo}>Add</button>
+        <div className="flex gap-2 mb-6">
+          <input
+            className="flex-grow border border-gray-300 p-3 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-300 outline-none transition"
+            value={text}
+            placeholder="Enter a task..."
+            onChange={(e) => setText(e.target.value)}
+          />
+          <button
+            className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition"
+            onClick={addTodo}
+          >
+            Add
+          </button>
+        </div>
+
+        <ul className="space-y-4">
+          {todos.map((todo, index) => (
+            <li
+              key={todo._id}
+              className="flex justify-between items-center bg-gray-50 px-4 py-3 rounded-xl shadow-sm border transition transform hover:scale-[1.01]"
+              style={{ animation: `fadeIn 0.3s ease ${index * 0.1}s both` }}
+            >
+              <span className={`${todo.read ? 'line-through text-gray-400' : 'text-gray-800'} text-lg`}>
+                {todo.text}
+              </span>
+              <div className="flex gap-2 text-sm">
+                {!todo.read && (
+                  <button
+                    className="text-blue-500 hover:text-blue-700 transition"
+                    onClick={() => markAsRead(todo._id)}
+                  >
+                    Mark Read
+                  </button>
+                )}
+                <button
+                  className="text-red-500 hover:text-red-700 transition"
+                  onClick={() => deleteTodo(todo._id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
-      <ul>
-        {todos.map(todo => (
-          <li key={todo._id} className="flex justify-between items-center mb-2 p-2 border rounded bg-white shadow-sm">
-            <span className={todo.read ? 'line-through text-gray-500' : ''}>{todo.text}</span>
-            <div className="flex gap-2">
-              {!todo.read && (
-                <button className="text-blue-500 hover:underline" onClick={() => markAsRead(todo._id)}>Mark Read</button>
-              )}
-              <button className="text-red-500 hover:underline" onClick={() => deleteTodo(todo._id)}>Delete</button>
-            </div>
-          </li>
-        ))}
-      </ul>
+
+      <style>{`
+        @keyframes fadeIn {
+          0% { opacity: 0; transform: translateY(10px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 };
