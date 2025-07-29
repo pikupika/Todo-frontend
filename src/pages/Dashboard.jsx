@@ -149,7 +149,7 @@ const [editText, setEditText] = useState('');
                         onClick={() => markAsRead(todo._id)}
                         className="text-green-600 hover:underline"
                       >
-                        Mark Done
+                        Done
                       </button>
                     )}
                     <button
