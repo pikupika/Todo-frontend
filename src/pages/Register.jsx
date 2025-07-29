@@ -9,11 +9,11 @@ const Register = () => {
   const handleRegister = async () => {
     if (!email) {
         alert('Please enter your email address.');
-        return; // Stop the function if email is empty
+        return; 
     }
     if (!password) {
         alert('Please choose a password.');
-        return; // Stop the function if password is empty
+        return;
     }
 
     try {

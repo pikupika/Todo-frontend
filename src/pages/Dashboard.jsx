@@ -129,10 +129,8 @@ const [editText, setEditText] = useState('');
               <div className="flex gap-3 ml-4">
                 {editId === todo._id ? (
                   <>
-                    <button
-                      onClick={() => updateTodo(todo._id, editText)}
-                      className="text-blue-600 hover:underline"
-                    >
+                    <button onClick={() => updateTodo(todo._id, editText)}
+                      className="text-blue-600 hover:underline">
                       Save
                     </button>
                     <button
@@ -140,8 +138,7 @@ const [editText, setEditText] = useState('');
                         setEditId(null);
                         setEditText('');
                       }}
-                      className="text-gray-600 hover:underline"
-                    >
+                      className="text-gray-600 hover:underline">
                       Cancel
                     </button>
                   </>
@@ -152,7 +149,7 @@ const [editText, setEditText] = useState('');
                         onClick={() => markAsRead(todo._id)}
                         className="text-green-600 hover:underline"
                       >
-                        Mark Read
+                        Mark Done
                       </button>
                     )}
                     <button
