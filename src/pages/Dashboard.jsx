@@ -147,8 +147,7 @@ const [editText, setEditText] = useState('');
                     {!todo.read && (
                       <button
                         onClick={() => markAsRead(todo._id)}
-                        className="text-green-600 hover:underline"
-                      >
+                        className="text-green-600 hover:underline">
                         Done
                       </button>
                     )}
@@ -157,14 +156,12 @@ const [editText, setEditText] = useState('');
                         setEditId(todo._id);
                         setEditText(todo.text);
                       }}
-                      className="text-yellow-600 hover:underline"
-                    >
+                      className="text-yellow-600 hover:underline">
                       Edit
                     </button>
                     <button
                       onClick={() => deleteTodo(todo._id)}
-                      className="text-red-600 hover:underline"
-                    >
+                      className="text-red-600 hover:underline">
                       Delete
                     </button>
                   </>

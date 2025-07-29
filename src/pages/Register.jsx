@@ -15,6 +15,7 @@ const Register = () => {
         alert('Please choose a password.');
         return;
     }
+    
 
     try {
         await axios.post('https://todo-backend-0ar5.onrender.com/api/auth/register', {
