@@ -1,34 +1,34 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axios from '../api/axios'; 
 import { Link } from 'react-router-dom';
+
+
 
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleRegister = async () => {
     if (!email) {
-        alert('Please enter your email address.');
-        return; 
+      alert('Please enter your email address.');
+      return;
     }
     if (!password) {
-        alert('Please choose a password.');
-        return;
+      alert('Please choose a password.');
+      return;
     }
-    
 
     try {
-        await axios.post('https://todo-backend-0ar5.onrender.com/api/auth/register', {
-            email,
-            password
-        });
-        alert('Registration successful! You can now log in.');
-        window.location.href = '/';
+      await axios.post('/api/auth/register', { email, password });
+      alert('Registration successful! You can now log in.');
+      navigate('/'); // ✅ cleaner than window.location.href
     } catch (err) {
-        console.error(err.response?.data || err.message);
-        alert(err.response?.data?.message || 'Registration failed');
+      console.error(err.response?.data || err.message);
+      alert(err.response?.data?.message || 'Registration failed');
     }
-};
+  };
+
 
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-[#f5eaff]">
