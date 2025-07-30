@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const navigate = navigate();
 
   const handleRegister = async () => {
     if (!email) {
